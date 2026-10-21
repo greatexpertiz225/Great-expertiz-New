@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#0b263b">
+  <meta name="description" content="Administration GREAT EXPERTIZ — Transport, logistique et gestion des commandes B2B.">
+  <title>Administration | GREAT EXPERTIZ</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="admin.css">
+  <script src="admin.js" defer></script>
+</head>
+
+<body class="admin-body">
+
+  <!-- ÉCRAN DE CONNEXION -->
+  <section class="login-screen" id="loginScreen">
+    <div class="login-decoration" aria-hidden="true">
+      <span class="decoration-circle decoration-circle-one"></span>
+      <span class="decoration-circle decoration-circle-two"></span>
+      <span class="decoration-line"></span>
+    </div>
+
+    <div class="login-panel">
+      <a class="admin-brand" href="index.html" aria-label="Retour au site GREAT EXPERTIZ">
+        <span class="brand-mark" aria-hidden="true">GE</span>
+        <span class="brand-copy">
+          <strong>GREAT EXPERTIZ</strong>
+          <small>TRANSPORT · LOGISTIQUE · B2B</small>
+        </span>
+      </a>
+
+      <div class="login-heading">
+        <span class="eyebrow">ESPACE PROFESSIONNEL</span>
+        <h1>Bienvenue<br>dans votre espace.</h1>
+        <p>Connectez-vous pour gérer les commandes et les opérations de GREAT EXPERTIZ.</p>
+      </div>
+
+      <form id="adminLoginForm" class="login-form">
+        <div class="form-field">
+          <label for="adminEmail">Adresse e-mail</label>
+          <input
+            type="email"
+            id="adminEmail"
+            name="email"
+            placeholder="nom@entreprise.com"
+            autocomplete="username"
+            required
+          >
+        </div>
+
+        <div class="form-field">
+          <label for="adminPassword">Mot de passe ou code d’accès</label>
+          <input
+            type="password"
+            id="adminPassword"
+            name="password"
+            placeholder="Saisissez votre accès"
+            autocomplete="current-password"
+            required
+          >
+        </div>
+
+        <div class="login-options">
+          <label class="checkbox-label">
+            <input type="checkbox" id="showPassword">
+            <span>Afficher le code</span>
+          </label>
+        </div>
+
+        <button type="submit" class="button button-primary button-full" id="loginButton">
+          <span>Se connecter</span>
+          <span aria-hidden="true">→</span>
+        </button>
+
+        <p id="loginMessage" class="form-message" role="status" aria-live="polite"></p>
+      </form>
+
+      <div class="login-security">
+        <span class="security-icon" aria-hidden="true">◆</span>
+        <p>Accès réservé aux personnes autorisées.</p>
+      </div>
+
+      <a href="index.html" class="back-to-site">← Retour au site public</a>
+    </div>
+
+    <div class="login-footer">
+      <span>© <span id="loginYear"></span> GREAT EXPERTIZ</span>
+      <span>Transport · Logistique · B2B</span>
+    </div>
+  </section>
+
+
+  <!-- APPLICATION D'ADMINISTRATION -->
+  <div class="admin-app" id="adminApp" hidden>
+
+    <!-- BARRE LATÉRALE -->
+    <aside class="admin-sidebar" id="adminSidebar">
+
+      <div class="sidebar-brand">
+        <a class="admin-brand" href="index.html">
+          <span class="brand-mark" aria-hidden="true">GE</span>
+          <span class="brand-copy">
+            <strong>GREAT EXPERTIZ</strong>
+            <small>ADMINISTRATION</small>
+          </span>
+        </a>
+
+        <button
+          type="button"
+          class="icon-button sidebar-close"
+          id="sidebarClose"
+          aria-label="Fermer le menu"
+        >×</button>
+      </div>
+
+      <div class="sidebar-caption">ESPACE DE TRAVAIL</div>
+
+      <nav class="admin-navigation" id="adminNav" aria-label="Navigation administrative">
+
+        <button type="button" class="nav-item active" data-section="dashboard">
+          <span class="nav-icon" aria-hidden="true">▦</span>
+          <span>Vue d’ensemble</span>
+        </button>
+
+        <button type="button" class="nav-item" data-section="orders">
+          <span class="nav-icon" aria-hidden="true">▤</span>
+          <span>Commandes</span>
+          <span class="nav-badge" id="pendingBadge">0</span>
+        </button>
+
+        <button type="button" class="nav-item" data-section="archive">
+          <span class="nav-icon" aria-hidden="true">▣</span>
+          <span>Archives</span>
+        </button>
+
+        <button type="button" class="nav-item" data-section="trash">
+          <span class="nav-icon" aria-hidden="true">♲</span>
+          <span>Corbeille</span>
+        </button>
+
+        <div class="sidebar-divider"></div>
+
+        <div class="sidebar-caption">ADMINISTRATION</div>
+
+        <button type="button" class="nav-item" data-section="members" id="membersNavItem">
+          <span class="nav-icon" aria-hidden="true">♙</span>
+          <span>Utilisateurs</span>
+        </button>
+
+        <button type="button" class="nav-item" data-section="settings">
+          <span class="nav-icon" aria-hidden="true">⚙</span>
+          <span>Paramètres</span>
+        </button>
+      </nav>
+
+      <div class="sidebar-bottom">
+        <div class="sidebar-status">
+          <span class="status-indicator" id="connectionIndicator"></span>
+          <div>
+            <strong id="connectionLabel">Vérification du service</strong>
+            <small id="connectionDescription">Connexion au serveur</small>
+          </div>
+        </div>
+
+        <a class="sidebar-public
