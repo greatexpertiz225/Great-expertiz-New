@@ -167,4 +167,387 @@
           </div>
         </div>
 
-        <a class="sidebar-public
+        <a class="sidebar-public-link" href="index.html" target="_blank" rel="noopener">
+          <span aria-hidden="true">↗</span>
+          Voir le site public
+        </a>
+
+        <button type="button" class="logout-button" id="logoutButton">
+          <span aria-hidden="true">⇥</span>
+          <span>Déconnexion</span>
+        </button>
+      </div>
+    </aside>
+
+
+    <!-- VOILE MOBILE -->
+    <button
+      type="button"
+      class="sidebar-overlay"
+      id="sidebarOverlay"
+      aria-label="Fermer le menu"
+      hidden
+    ></button>
+
+
+    <!-- ZONE PRINCIPALE -->
+    <div class="admin-main">
+
+      <!-- EN-TÊTE -->
+      <header class="admin-topbar">
+
+        <div class="topbar-left">
+          <button
+            type="button"
+            class="icon-button sidebar-toggle"
+            id="sidebarToggle"
+            aria-label="Ouvrir le menu"
+          >☰</button>
+
+          <div class="breadcrumb">
+            <span>GREAT EXPERTIZ</span>
+            <span class="breadcrumb-separator">/</span>
+            <strong id="currentPageTitle">Vue d’ensemble</strong>
+          </div>
+        </div>
+
+        <div class="topbar-right">
+          <button type="button" class="icon-button refresh-button" id="refreshOrders" aria-label="Actualiser les données" title="Actualiser">
+            ↻
+          </button>
+
+          <div class="admin-user">
+            <div class="user-avatar" id="userAvatar">GE</div>
+            <div class="user-details">
+              <strong id="loggedInUser">Administrateur</strong>
+              <span id="loggedInRole">Accès autorisé</span>
+            </div>
+          </div>
+        </div>
+      </header>
+
+
+      <!-- CONTENU -->
+      <main class="admin-content" id="adminMain">
+
+        <!-- TABLEAU DE BORD -->
+        <section class="admin-section active" id="dashboardSection" data-page="dashboard">
+
+          <div class="page-heading">
+            <div>
+              <span class="eyebrow">PILOTAGE DES OPÉRATIONS</span>
+              <h1>Vue d’ensemble</h1>
+              <p>Suivez l’activité et les commandes de GREAT EXPERTIZ.</p>
+            </div>
+
+            <button type="button" class="button button-primary" id="goToOrdersButton">
+              <span aria-hidden="true">＋</span>
+              Voir les commandes
+            </button>
+          </div>
+
+          <div class="dashboard-welcome">
+            <div class="welcome-copy">
+              <span class="welcome-label">GREAT EXPERTIZ · TRANSPORT · LOGISTIQUE · B2B</span>
+              <h2>Une vision claire de vos opérations.</h2>
+              <p>Retrouvez les demandes clients, suivez leur évolution et organisez votre activité depuis un seul espace.</p>
+            </div>
+
+            <div class="welcome-symbol" aria-hidden="true">
+              <span class="symbol-line symbol-line-one"></span>
+              <span class="symbol-line symbol-line-two"></span>
+              <span class="symbol-circle">GE</span>
+            </div>
+          </div>
+
+          <!-- INDICATEURS -->
+          <div class="stats-grid">
+
+            <article class="stat-card">
+              <div class="stat-card-top">
+                <span class="stat-label">Toutes les commandes</span>
+                <span class="stat-icon stat-icon-blue" aria-hidden="true">▤</span>
+              </div>
+              <strong class="stat-value" id="statTotal">—</strong>
+              <span class="stat-caption">Commandes enregistrées</span>
+            </article>
+
+            <article class="stat-card">
+              <div class="stat-card-top">
+                <span class="stat-label">En attente</span>
+                <span class="stat-icon stat-icon-orange" aria-hidden="true">◷</span>
+              </div>
+              <strong class="stat-value" id="statPending">—</strong>
+              <span class="stat-caption">À examiner ou confirmer</span>
+            </article>
+
+            <article class="stat-card">
+              <div class="stat-card-top">
+                <span class="stat-label">En cours</span>
+                <span class="stat-icon stat-icon-purple" aria-hidden="true">↗</span>
+              </div>
+              <strong class="stat-value" id="statProgress">—</strong>
+              <span class="stat-caption">Opérations en traitement</span>
+            </article>
+
+            <article class="stat-card">
+              <div class="stat-card-top">
+                <span class="stat-label">Terminées</span>
+                <span class="stat-icon stat-icon-green" aria-hidden="true">✓</span>
+              </div>
+              <strong class="stat-value" id="statCompleted">—</strong>
+              <span class="stat-caption">Prestations terminées</span>
+            </article>
+
+          </div>
+
+
+          <!-- COMMANDES RÉCENTES -->
+          <section class="content-card recent-orders-card">
+
+            <div class="card-heading">
+              <div>
+                <h2>Commandes récentes</h2>
+                <p>Les dernières demandes enregistrées.</p>
+              </div>
+
+              <button type="button" class="button button-secondary button-small" id="viewAllOrders">
+                Toutes les commandes →
+              </button>
+            </div>
+
+            <div class="table-responsive">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Référence</th>
+                    <th>Client</th>
+                    <th>Prestation</th>
+                    <th>Date</th>
+                    <th>Statut</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody id="recentOrdersBody">
+                  <tr>
+                    <td colspan="6" class="table-empty">
+                      Les commandes apparaîtront après connexion au serveur.
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+          </section>
+
+
+          <!-- ÉTATS DES COMMANDES -->
+          <section class="content-card status-overview-card">
+            <div class="card-heading">
+              <div>
+                <h2>Répartition des commandes</h2>
+                <p>Vue synthétique des statuts.</p>
+              </div>
+            </div>
+
+            <div class="status-overview-grid">
+              <button type="button" class="status-overview-item" data-status-filter="En attente">
+                <span class="status-dot status-dot-pending"></span>
+                <span>En attente</span>
+                <strong id="overviewPending">—</strong>
+              </button>
+
+              <button type="button" class="status-overview-item" data-status-filter="Confirmée">
+                <span class="status-dot status-dot-confirmed"></span>
+                <span>Confirmées</span>
+                <strong id="overviewConfirmed">—</strong>
+              </button>
+
+              <button type="button" class="status-overview-item" data-status-filter="En cours">
+                <span class="status-dot status-dot-progress"></span>
+                <span>En cours</span>
+                <strong id="overviewProgress">—</strong>
+              </button>
+
+              <button type="button" class="status-overview-item" data-status-filter="Terminée">
+                <span class="status-dot status-dot-completed"></span>
+                <span>Terminées</span>
+                <strong id="overviewCompleted">—</strong>
+              </button>
+            </div>
+          </section>
+
+        </section>
+
+
+
+        <!-- COMMANDES -->
+        <section class="admin-section" id="ordersSection" data-page="orders">
+
+          <div class="page-heading">
+            <div>
+              <span class="eyebrow">GESTION OPÉRATIONNELLE</span>
+              <h1>Commandes</h1>
+              <p>Consultez les demandes, vérifiez les informations et mettez à jour leur statut.</p>
+            </div>
+          </div>
+
+          <div class="content-card">
+
+            <div class="toolbar">
+              <div class="search-field">
+                <span aria-hidden="true">⌕</span>
+                <input type="search" id="orderSearch" placeholder="Rechercher une référence, un client..." aria-label="Rechercher une commande">
+              </div>
+
+              <div class="toolbar-filters">
+                <select id="statusFilter" aria-label="Filtrer par statut">
+                  <option value="">Tous les statuts</option>
+                  <option value="En attente">En attente</option>
+                  <option value="Confirmée">Confirmée</option>
+                  <option value="En cours">En cours</option>
+                  <option value="Terminée">Terminée</option>
+                  <option value="Annulée">Annulée</option>
+                </select>
+
+                <select id="dateFilter" aria-label="Filtrer par période">
+                  <option value="">Toutes les dates</option>
+                  <option value="today">Aujourd’hui</option>
+                  <option value="7days">7 derniers jours</option>
+                  <option value="30days">30 derniers jours</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="bulk-toolbar" id="bulkToolbar" hidden>
+              <span><strong id="selectedOrdersCount">0</strong> commande(s) sélectionnée(s)</span>
+
+              <div class="bulk-actions">
+                <button type="button" class="button button-secondary button-small" id="bulkArchiveButton">
+                  Archiver
+                </button>
+                <button type="button" class="button button-danger button-small" id="bulkTrashButton">
+                  Mettre à la corbeille
+                </button>
+                <button type="button" class="button button-text button-small" id="clearSelectionButton">
+                  Annuler la sélection
+                </button>
+              </div>
+            </div>
+
+            <div class="table-responsive">
+              <table class="data-table orders-table">
+                <thead>
+                  <tr>
+                    <th class="checkbox-column">
+                      <input type="checkbox" id="selectAllOrders" aria-label="Sélectionner toutes les commandes affichées">
+                    </th>
+                    <th>Référence</th>
+                    <th>Date</th>
+                    <th>Client</th>
+                    <th>Prestation</th>
+                    <th>Enlèvement</th>
+                    <th>Livraison</th>
+                    <th>Statut</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="ordersTableBody">
+                  <tr>
+                    <td colspan="9" class="table-empty">
+                      Aucune donnée chargée. Connectez le service backend pour afficher les commandes.
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="table-footer">
+              <span id="ordersCountLabel">0 commande</span>
+              <div class="pagination" id="ordersPagination" aria-label="Pagination des commandes"></div>
+            </div>
+
+            <p id="ordersMessage" class="form-message" role="status" aria-live="polite"></p>
+          </div>
+
+        </section>
+
+
+
+        <!-- ARCHIVES -->
+        <section class="admin-section" id="archiveSection" data-page="archive">
+
+          <div class="page-heading">
+            <div>
+              <span class="eyebrow">HISTORIQUE</span>
+              <h1>Archives</h1>
+              <p>Retrouvez les commandes archivées sans les confondre avec les commandes actives.</p>
+            </div>
+          </div>
+
+          <div class="content-card">
+            <div class="toolbar">
+              <div class="search-field">
+                <span aria-hidden="true">⌕</span>
+                <input type="search" id="archiveSearch" placeholder="Rechercher dans les archives..." aria-label="Rechercher dans les archives">
+              </div>
+
+              <div class="toolbar-filters">
+                <button type="button" class="button button-secondary button-small" id="restoreSelectedArchives" disabled>
+                  Restaurer la sélection
+                </button>
+              </div>
+            </div>
+
+            <div class="table-responsive">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th><input type="checkbox" id="selectAllArchives" aria-label="Sélectionner toutes les archives"></th>
+                    <th>Référence</th>
+                    <th>Date</th>
+                    <th>Client</th>
+                    <th>Prestation</th>
+                    <th>Statut</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="archiveTableBody">
+                  <tr>
+                    <td colspan="7" class="table-empty">Aucune archive chargée.</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <p id="archiveMessage" class="form-message" role="status" aria-live="polite"></p>
+          </div>
+
+        </section>
+
+
+
+        <!-- CORBEILLE -->
+        <section class="admin-section" id="trashSection" data-page="trash">
+
+          <div class="page-heading">
+            <div>
+              <span class="eyebrow">GESTION DES SUPPRESSIONS</span>
+              <h1>Corbeille</h1>
+              <p>Restaurez une commande supprimée ou procédez à sa suppression définitive si vous y êtes autorisé.</p>
+            </div>
+          </div>
+
+          <div class="notice notice-warning">
+            <span class="notice-icon" aria-hidden="true">!</span>
+            <div>
+              <strong>Attention aux suppressions définitives</strong>
+              <p>Cette opération doit être réservée au propriétaire autorisé. Une confirmation sera demandée avant toute suppression définitive.</p>
+            </div>
+          </div>
+
+          <div class="content-card">
+            <div class="toolbar">
+              <div class="search-field">
+                <span aria-hidden="true">⌕</span>
+                <input type="search" id="trashSearch" placeholder="Recherche
