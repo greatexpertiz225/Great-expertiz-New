@@ -1,0 +1,764 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <meta name="theme-color" content="#0B263B">
+  <meta name="description" content="GREAT EXPERTIZ : transport de marchandises, déménagement et logistique B2B en Côte d'Ivoire. Demandez votre estimation en ligne.">
+
+  <title>GREAT EXPERTIZ | Transport • Logistique • B2B</title>
+
+  <!-- Police -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Design du site : fichier 2/7 -->
+  <link rel="stylesheet" href="styles.css">
+
+  <!-- Carte interactive : bibliothèque Leaflet -->
+  <link
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    crossorigin=""
+  >
+
+  <style>
+    /* Éléments spécifiques au parcours de commande */
+    .hidden {
+      display: none !important;
+    }
+
+    .hero-layout {
+      display: grid;
+      grid-template-columns: 1.05fr .95fr;
+      align-items: center;
+      gap: 42px;
+    }
+
+    .hero-visual {
+      min-height: 390px;
+      background: #dce8ef;
+    }
+
+    .hero-visual img {
+      min-height: 390px;
+      object-fit: cover;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 25px;
+      padding: 10px 14px;
+      border: 1px solid #dfe8ef;
+      border-radius: 30px;
+      background: #fff;
+      color: #183348;
+      font-size: .82rem;
+      font-weight: 700;
+    }
+
+    .hero-badge span {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #8ca300;
+    }
+
+    .trust-strip {
+      padding: 24px 0;
+      border-top: 1px solid #e3ebf1;
+      border-bottom: 1px solid #e3ebf1;
+      background: #fff;
+    }
+
+    .trust-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+
+    .trust-item {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      color: #183348;
+      font-size: .9rem;
+      font-weight: 700;
+    }
+
+    .trust-item strong {
+      color: #087fbd;
+      font-size: 1.2rem;
+    }
+
+    .section-dark {
+      color: #fff;
+      background: #0b263b;
+    }
+
+    .section-dark h2,
+    .section-dark h3 {
+      color: #fff;
+    }
+
+    .section-dark p {
+      color: #d2dfe8;
+    }
+
+    .order-intro {
+      max-width: 760px;
+      margin: 0 auto 35px;
+      text-align: center;
+    }
+
+    .order-progress {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 8px;
+      margin-bottom: 28px;
+    }
+
+    .progress-step {
+      padding: 12px 6px;
+      border-radius: 10px;
+      background: #edf2f6;
+      color: #647789;
+      text-align: center;
+      font-size: .76rem;
+      font-weight: 800;
+    }
+
+    .progress-step.active {
+      color: #fff;
+      background: #087fbd;
+    }
+
+    .order-step {
+      display: none;
+    }
+
+    .order-step.active {
+      display: block;
+      animation: fadeUp .3s ease both;
+    }
+
+    .order-step h3 {
+      margin-bottom: 9px;
+    }
+
+    .step-description {
+      margin-bottom: 24px;
+    }
+
+    .choice-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .choice-card {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      min-height: 85px;
+      padding: 16px;
+      border: 1px solid #dce6ee;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: border-color .2s ease, background .2s ease;
+    }
+
+    .choice-card:has(input:checked) {
+      border-color: #087fbd;
+      background: #eef8fd;
+    }
+
+    .choice-card input {
+      margin-top: 5px;
+      accent-color: #087fbd;
+    }
+
+    .choice-card strong {
+      display: block;
+      color: #0b263b;
+      font-size: .92rem;
+    }
+
+    .choice-card small {
+      display: block;
+      margin-top: 4px;
+      color: #647789;
+      font-size: .8rem;
+    }
+
+    .order-actions {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      margin-top: 28px;
+    }
+
+    .order-actions .btn {
+      min-width: 125px;
+    }
+
+    .form-help {
+      display: block;
+      margin-top: 5px;
+      color: #647789;
+      font-size: .8rem;
+    }
+
+    .notice {
+      padding: 14px 16px;
+      border: 1px solid #d5e9f5;
+      border-radius: 10px;
+      background: #f0f8fc;
+      color: #183348;
+      font-size: .88rem;
+    }
+
+    .notice.warning {
+      border-color: #f0dfac;
+      background: #fff9e9;
+    }
+
+    .map-toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin: 14px 0;
+    }
+
+    #orderMap {
+      width: 100%;
+      height: 340px;
+      overflow: hidden;
+      border: 1px solid #dce6ee;
+      border-radius: 14px;
+      background: #e8eef3;
+    }
+
+    .location-results {
+      display: grid;
+      gap: 6px;
+      margin-top: 7px;
+    }
+
+    .location-result {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1px solid #dce6ee;
+      border-radius: 8px;
+      background: #fff;
+      color: #183348;
+      text-align: left;
+    }
+
+    .location-result:hover {
+      border-color: #087fbd;
+      background: #f0f8fc;
+    }
+
+    .estimate-box {
+      padding: 24px;
+      border-radius: 14px;
+      background: #edf5fa;
+    }
+
+    .estimate-price {
+      margin: 8px 0;
+      color: #087fbd;
+      font-family: Manrope, sans-serif;
+      font-size: clamp(2rem, 6vw, 3rem);
+      font-weight: 800;
+      line-height: 1.2;
+    }
+
+    .receipt-box {
+      padding: 24px;
+      border: 1px solid #dce6ee;
+      border-radius: 14px;
+      background: #fff;
+    }
+
+    .receipt-code {
+      margin: 12px 0;
+      padding: 15px;
+      border-radius: 10px;
+      background: #edf5fa;
+      color: #0b263b;
+      font-family: monospace;
+      font-size: 1.25rem;
+      font-weight: 800;
+      text-align: center;
+      overflow-wrap: anywhere;
+    }
+
+    #qrContainer {
+      display: grid;
+      place-items: center;
+      min-height: 150px;
+      margin: 18px auto;
+    }
+
+    #qrContainer img,
+    #qrContainer canvas {
+      max-width: 180px;
+    }
+
+    .catalog-note {
+      margin-top: 12px;
+    }
+
+    .floating-help {
+      position: fixed;
+      right: 18px;
+      bottom: 18px;
+      z-index: 900;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 48px;
+      padding: 12px 18px;
+      border-radius: 28px;
+      color: #fff;
+      background: #0b263b;
+      box-shadow: 0 8px 25px rgba(11, 38, 59, .2);
+      font-size: .88rem;
+      font-weight: 800;
+    }
+
+    .floating-help:hover {
+      background: #087fbd;
+    }
+
+    .footer-brand {
+      margin-bottom: 12px;
+      color: #fff;
+      font-family: Manrope, sans-serif;
+      font-weight: 800;
+      font-size: 1.1rem;
+    }
+
+    @media (max-width: 850px) {
+      .hero-layout {
+        grid-template-columns: 1fr;
+      }
+
+      .hero-visual {
+        min-height: 260px;
+      }
+
+      .hero-visual img {
+        min-height: 260px;
+        max-height: 380px;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .trust-grid {
+        grid-template-columns: 1fr;
+        gap: 14px;
+      }
+
+      .trust-item {
+        justify-content: flex-start;
+      }
+
+      .choice-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .order-progress {
+        grid-template-columns: repeat(5, minmax(0, 1fr));
+      }
+
+      .progress-step {
+        padding: 10px 2px;
+        font-size: .65rem;
+      }
+
+      #orderMap {
+        height: 280px;
+      }
+
+      .order-actions {
+        flex-direction: column-reverse;
+      }
+
+      .order-actions .btn {
+        width: 100%;
+      }
+
+      .floating-help {
+        right: 12px;
+        bottom: 12px;
+        min-height: 44px;
+        padding: 10px 14px;
+      }
+    }
+
+    @media print {
+      body * {
+        visibility: hidden;
+      }
+
+      #receipt,
+      #receipt * {
+        visibility: visible;
+      }
+
+      #receipt {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        background: #fff;
+      }
+
+      .no-print {
+        display: none !important;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- ================= HEADER ================= -->
+  <header class="site-header">
+    <div class="container">
+
+      <a class="brand" href="#accueil" aria-label="GREAT EXPERTIZ, accueil">
+        <span class="brand-mark">GE</span>
+        <span>
+          <strong>GREAT EXPERTIZ</strong>
+          <small>TRANSPORT · LOGISTIQUE · B2B</small>
+        </span>
+      </a>
+
+      <button
+        id="menuToggle"
+        type="button"
+        aria-label="Ouvrir le menu"
+        aria-controls="mainNavigation"
+        aria-expanded="false"
+      >☰</button>
+
+      <nav id="mainNavigation" aria-label="Navigation principale">
+        <a href="#accueil">Accueil</a>
+        <a href="#services">Nos services</a>
+        <a href="#flotte">Nos véhicules</a>
+        <a href="#fonctionnement">Comment ça marche</a>
+        <a href="#suivi">Suivre une demande</a>
+        <a href="#partenaires">Devenir partenaire</a>
+        <a href="#commande" class="btn">FAIRE UNE COMMANDE →</a>
+      </nav>
+
+    </div>
+  </header>
+
+  <main>
+
+    <!-- ================= ACCUEIL ================= -->
+    <section id="accueil">
+      <div class="container hero-layout">
+
+        <div class="hero-content">
+          <span class="hero-eyebrow">Votre partenaire logistique en Côte d'Ivoire</span>
+
+          <h1>
+            Le transport professionnel,
+            <span style="color:#087fbd">en toute simplicité.</span>
+          </h1>
+
+          <p>
+            Marchandises, approvisionnement professionnel, déménagement et
+            logistique B2B : préparez votre demande en ligne et obtenez
+            une estimation adaptée à votre transport.
+          </p>
+
+          <div class="hero-actions">
+            <a href="#commande" class="btn btn-primary">
+              FAIRE UNE DEMANDE DE COMMANDE →
+            </a>
+
+            <a href="#services" class="btn btn-secondary">
+              Découvrir nos services
+            </a>
+          </div>
+
+          <div class="hero-badge">
+            <span></span>
+            Une solution adaptée à chaque transport
+          </div>
+        </div>
+
+        <div class="hero-visual">
+          <img
+            src="https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&w=1200&q=85"
+            alt="Entrepôt logistique et marchandises en préparation"
+            fetchpriority="high"
+          >
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ================= ENGAGEMENTS ================= -->
+    <div class="trust-strip">
+      <div class="container trust-grid">
+
+        <div class="trust-item">
+          <strong>01</strong>
+          Transport de marchandises
+        </div>
+
+        <div class="trust-item">
+          <strong>02</strong>
+          Solutions professionnelles B2B
+        </div>
+
+        <div class="trust-item">
+          <strong>03</strong>
+          Demande et suivi en ligne
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ================= SERVICES ================= -->
+    <section id="services">
+      <div class="container">
+
+        <div class="section-heading">
+          <span class="eyebrow">Nos expertises</span>
+          <h2>Des solutions logistiques pour votre activité</h2>
+          <p>
+            Des besoins ponctuels aux opérations professionnelles régulières,
+            décrivez votre marchandise pour préparer une demande adaptée.
+          </p>
+        </div>
+
+        <div class="services-grid">
+
+          <article class="service-card">
+            <div class="service-icon" aria-hidden="true">▰</div>
+            <h3>Transport de marchandises</h3>
+            <p>
+              Colis, cartons, marchandises commerciales, équipements et
+              approvisionnement de points de vente.
+            </p>
+          </article>
+
+          <article class="service-card">
+            <div class="service-icon" aria-hidden="true">⌂</div>
+            <h3>Déménagement</h3>
+            <p>
+              Transport de mobilier, transfert de bureaux et déménagement
+              de logements ou de locaux professionnels.
+            </p>
+          </article>
+
+          <article class="service-card">
+            <div class="service-icon" aria-hidden="true">▤</div>
+            <h3>Palettes et logistique B2B</h3>
+            <p>
+              Approvisionnement, transferts inter-agences et acheminement
+              de marchandises palettisées.
+            </p>
+          </article>
+
+          <article class="service-card">
+            <div class="service-icon" aria-hidden="true">⚙</div>
+            <h3>Transport industriel</h3>
+            <p>
+              Équipements, machines et marchandises pouvant nécessiter
+              des capacités de transport importantes.
+            </p>
+          </article>
+
+          <article class="service-card">
+            <div class="service-icon" aria-hidden="true">❄</div>
+            <h3>Transport spécialisé</h3>
+            <p>
+              Besoins particuliers à préciser pour vérifier les équipements,
+              les conditions et la disponibilité nécessaires.
+            </p>
+          </article>
+
+          <article class="service-card">
+            <div class="service-icon" aria-hidden="true">⇄</div>
+            <h3>Transport régulier</h3>
+            <p>
+              Décrivez vos besoins récurrents pour préparer une demande
+              correspondant à vos opérations professionnelles.
+            </p>
+          </article>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= FLOTTE ================= -->
+    <section id="flotte">
+      <div class="container">
+
+        <div class="section-heading">
+          <span class="eyebrow">Des capacités adaptées</span>
+          <h2>Du véhicule utilitaire au transport de grande capacité</h2>
+          <p>
+            La catégorie proposée dépendra de la marchandise, de son volume,
+            de son poids et des capacités réellement disponibles.
+          </p>
+        </div>
+
+        <div class="fleet-grid">
+
+          <article class="fleet-card">
+            <img
+              src="https://images.unsplash.com/photo-1601584115197-04ecc0da31d7?auto=format&fit=crop&w=900&q=80"
+              alt="Véhicule utilitaire de transport"
+              loading="lazy"
+            >
+            <div class="card-content">
+              <h3>Utilitaires et fourgons</h3>
+              <p>Pour les marchandises compatibles avec un petit volume de chargement.</p>
+            </div>
+          </article>
+
+          <article class="fleet-card">
+            <img
+              src="https://images.unsplash.com/photo-1519003722824-194d4455a60c?auto=format&fit=crop&w=900&q=80"
+              alt="Camion de transport de marchandises"
+              loading="lazy"
+            >
+            <div class="card-content">
+              <h3>Camions porteurs</h3>
+              <p>Pour des volumes et charges adaptés aux capacités du véhicule.</p>
+            </div>
+          </article>
+
+          <article class="fleet-card">
+            <img
+              src="https://images.unsplash.com/photo-1586191582151-f73872dfd183?auto=format&fit=crop&w=900&q=80"
+              alt="Transport de marchandises par camion"
+              loading="lazy"
+            >
+            <div class="card-content">
+              <h3>Poids lourds et semi-remorques</h3>
+              <p>Pour les opérations de plus grande capacité, sous réserve de disponibilité.</p>
+            </div>
+          </article>
+
+        </div>
+
+        <p style="text-align:center;margin-top:24px;font-size:.86rem">
+          Les visuels illustrent les catégories de transport. Ils ne garantissent
+          pas la disponibilité immédiate d'un véhicule précis.
+        </p>
+
+      </div>
+    </section>
+
+    <!-- ================= FONCTIONNEMENT ================= -->
+    <section id="fonctionnement">
+      <div class="container">
+
+        <div class="section-heading">
+          <span class="eyebrow">Un parcours simple</span>
+          <h2>Votre demande, étape par étape</h2>
+          <p>
+            Renseignez les informations utiles, vérifiez le récapitulatif
+            et consultez l'estimation proposée par le système.
+          </p>
+        </div>
+
+        <div class="steps-grid">
+
+          <article class="step-card">
+            <div class="step-number">01</div>
+            <h3>Décrivez</h3>
+            <p>Choisissez le type de transport et les marchandises à acheminer.</p>
+          </article>
+
+          <article class="step-card">
+            <div class="step-number">02</div>
+            <h3>Localisez</h3>
+            <p>Indiquez l'enlèvement et la destination grâce à la recherche de lieux.</p>
+          </article>
+
+          <article class="step-card">
+            <div class="step-number">03</div>
+            <h3>Estimez</h3>
+            <p>Consultez l'estimation calculée à partir d'un barème configuré et validé.</p>
+          </article>
+
+          <article class="step-card">
+            <div class="step-number">04</div>
+            <h3>Validez</h3>
+            <p>Vérifiez les informations puis transmettez votre demande.</p>
+          </article>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= PARCOURS DE COMMANDE ================= -->
+    <section id="commande" class="section-dark">
+      <div class="container">
+
+        <div class="order-intro">
+          <span class="eyebrow" style="color:#8ed7fa">Votre demande de transport</span>
+          <h2>Préparons votre transport</h2>
+          <p>
+            Décrivez la marchandise, renseignez les lieux d'enlèvement et
+            de livraison, puis consultez le récapitulatif avant validation.
+          </p>
+        </div>
+
+        <div class="order-panel">
+
+          <div class="order-progress" aria-label="Progression de la demande">
+            <div class="progress-step active" data-progress="1">1. Besoin</div>
+            <div class="progress-step" data-progress="2">2. Colis</div>
+            <div class="progress-step" data-progress="3">3. Trajet</div>
+            <div class="progress-step" data-progress="4">4. Prix</div>
+            <div class="progress-step" data-progress="5">5. Validation</div>
+          </div>
+
+          <form id="orderForm" novalidate>
+
+            <!-- ÉTAPE 1 -->
+            <div class="order-step active" data-step="1">
+
+              <h3>Quel transport souhaitez-vous organiser ?</h3>
+              <p class="step-description">
+                Choisissez la catégorie correspondant le mieux à votre besoin.
+              </p>
+
+              <div class="form-group">
+                <label for="transportType">Type de transport *</label>
+                <select id="transportType" name="transportType" required>
+                  <option value="">Choisir un type de transport</option>
+                  <option value="marchandises">Transport de marchandises</option>
+                  <option value="demenagement">Déménagement</option>
+                  <option value="palettes">Palettes et marchandises commerciales</option>
+                  <option value="interagence">Transfert inter-agences</option>
+                  <option value="industriel">Transport industriel</option>
+                  <option value="frigorifique">Transport frigorifique</option>
+                  <option value="conteneur">Transport de conteneur</option>
+                  <option value="exceptionnel">Transport spécialisé ou exceptionnel</option>
+                  <option value="autre">Autre besoin</option>
+                </select>
+              </div>
+
+              <div class="form-group" style="margin-top:18px">
+                <label for="frequency">Fréquence</label>
+                <select id="frequency" name="frequency">
+                
